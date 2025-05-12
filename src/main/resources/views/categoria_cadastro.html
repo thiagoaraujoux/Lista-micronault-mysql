@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{}, ~{::section})}">
+<head>
+    <title>Cadastrar Categoria</title>
+</head>
+<body>
+    <section>
+        <div class="signup-container">
+            <h2>Cadastrar Nova Categoria</h2>
+
+            <div th:if="${errorMessage}" style="color: red; margin-bottom: 15px; font-weight: bold;">
+                <p th:text="${errorMessage}"></p>
+            </div>
+
+            <div th:if="${successMessage}" style="color: green; margin-bottom: 15px; font-weight: bold;">
+                <p th:text="${successMessage}"></p>
+            </div>
+
+
+            <form method="POST" action="/categoria/cadastro">
+                <div class="input-group">
+                    <label for="nome">Nome da Categoria:</label>
+                    <input type="text" id="nome" name="nome" placeholder="Ex: Trabalho, Pessoal" required>
+                </div>
+
+                <button type="submit">Salastrar Categoria</button>
+            </form>
+
+            <div class="login-link"> <a href="/lista">Voltar para Listas</a>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html>

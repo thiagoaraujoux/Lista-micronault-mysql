@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{}, ~{::section})}">
+<head>
+    <title>Minhas Listas</title>
+</head>
+<body>
+    <section>
+        <div class="content-container" style="text-align: center; padding: 20px;">
+            <h2>Minhas Listas de Tarefas</h2>
+            <p>Esta é a página onde suas listas de tarefas serão exibidas.</p>
+
+            <div style="margin-top: 20px;">
+                 <a href="/lista/cadastro" style="color: #4CAF50; text-decoration: none; font-weight: bold;">+ Nova Lista</a>
+            </div>
+
+            <div class="logout-link" style="margin-top: 30px;">
+                 <a href="/logout" style="color: #E53935; text-decoration: none; font-weight: bold; font-size: 1.1em;">Sair</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

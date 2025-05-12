@@ -17,11 +17,11 @@
             padding: 20px; /* Adiciona padding para telas menores */
             box-sizing: border-box; /* Inclui padding na largura total */
             overflow: hidden; /* Evita scrollbar se o conteúdo for exatamente 100vh */
+            position: relative; /* Necessário para posicionar o pop-up */
         }
 
         /* Estilos para o container principal (usado tanto para login quanto cadastro) */
-        /* Aplicamos os mesmos estilos para .login-container e .signup-container */
-        .signup-container { /* Usando signup-container para esta página */
+        .signup-container {
             background-color: #ffffff; /* Fundo branco */
             padding: 32px; /* Mais padding interno */
             border-radius: 20px; /* Cantos mais arredondados */
@@ -29,6 +29,8 @@
             width: 100%; /* Ocupa a largura total disponível */
             max-width: 400px; /* Largura máxima para desktops */
             text-align: center; /* Centraliza o conteúdo */
+            z-index: 1; /* Garante que o container fique acima do overlay do pop-up */
+            position: relative; /* Necessário para z-index */
         }
 
         /* Estilos para os títulos (h2) dentro dos containers */
@@ -113,7 +115,7 @@
         }
 
         /* Estilos para o link de login */
-        .login-link { /* Usando login-link para esta página */
+        .login-link {
             display: block; /* Link em sua própria linha */
             margin-top: 24px; /* Espaço acima do link */
             font-size: 15px;
@@ -160,6 +162,57 @@
                 font-size: 15px; /* Reduz tamanho da fonte */
             }
         }
+
+        /* Estilos para o Pop-up de Erro */
+        .error-popup {
+            position: fixed; /* Posição fixa na tela */
+            top: 20px; /* Distância do topo */
+            right: 20px; /* Distância da direita */
+            background-color: #f8d7da; /* Fundo vermelho claro */
+            color: #721c24; /* Texto vermelho escuro */
+            border: 1px solid #f5c6cb; /* Borda vermelha */
+            border-radius: 8px; /* Cantos arredondados */
+            padding: 15px 20px; /* Espaçamento interno (ajustado um pouco) */
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra */
+            display: none; /* Inicialmente oculto */
+            max-width: 300px; /* Largura máxima */
+            text-align: left; /* Alinha texto à esquerda */
+            word-wrap: break-word; /* Quebra palavras longas */
+        }
+
+        .error-popup .close-btn {
+            position: absolute; /* Posição absoluta em relação ao pop-up */
+            top: 5px; /* Posição do topo */
+            right: 10px; /* Posição da direita */
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #721c24;
+        }
+
+        /* Estilos para a Mensagem de Sucesso */
+        .success-message {
+            position: fixed; /* Posição fixa na tela */
+            top: 20px; /* Distância do topo */
+            right: 20px; /* Distância da direita */
+            background-color: #d4edda; /* Fundo verde claro */
+            color: #155724; /* Texto verde escuro */
+            border: 1px solid #c3e6cb; /* Borda verde */
+            border-radius: 8px; /* Cantos arredondados */
+            padding: 15px 20px; /* Espaçamento interno (ajustado um pouco) */
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra */
+            display: none; /* Inicialmente oculto */
+            max-width: 300px; /* Largura máxima */
+            text-align: left; /* Alinha texto à esquerda */
+            font-weight: bold;
+            word-wrap: break-word; /* Quebra palavras longas */
+        }
+         .success-message p {
+            margin: 0; /* Remove margem padrão dos parágrafos */
+            padding: 2px 0; /* Adiciona um pouco de padding vertical */
+         }
     </style>
 </head>
 <body>
@@ -184,5 +237,74 @@
             Já tem uma conta? <a href="/login">Faça login</a>
         </div>
     </div>
+
+    <div id="errorPopup" class="error-popup">
+        <span class="close-btn" onclick="closeErrorPopup()">&times;</span>
+        <p id="errorMessageText"></p>
+    </div>
+
+    <div id="successMessage" class="success-message">
+        <p>Cadastro realizado com sucesso!</p>
+        <p>Redirecionando para a página de login...</p>
+    </div>
+
+    <script>
+        // Função para obter parâmetros da URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Função para exibir o pop-up de erro
+        function showErrorPopup(message) {
+            const popup = document.getElementById('errorPopup');
+            const messageText = document.getElementById('errorMessageText');
+            messageText.innerText = message;
+            popup.style.display = 'block'; // Exibe o pop-up
+        }
+
+        // Função para fechar o pop-up de erro
+        function closeErrorPopup() {
+            const popup = document.getElementById('errorPopup');
+            popup.style.display = 'none'; // Oculta o pop-up
+        }
+
+        // Função para exibir a mensagem de sucesso e redirecionar
+        function showSuccessMessage() {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block'; // Exibe a mensagem de sucesso
+
+            // Redireciona para a página de login após 3 segundos (ajustado)
+            setTimeout(function() {
+                window.location.href = '/login';
+            }, 3000); // 3000 milissegundos = 3 segundos
+        }
+
+        // Verifica se há um parâmetro de erro ou sucesso na URL ao carregar a página
+        window.onload = function() {
+            const errorType = getUrlParameter('erro'); // Verifica o parâmetro 'erro'
+            const success = getUrlParameter('sucesso'); // Verifica o parâmetro 'sucesso'
+            let errorMessage = '';
+
+            // Define a mensagem com base no tipo de erro
+            if (errorType === 'email_duplicado') {
+                errorMessage = 'Este email já está cadastrado. Tente fazer login ou use outro email.';
+            }
+            // Você pode adicionar mais tipos de erro aqui
+            // else if (errorType === 'outro_erro') {
+            //     errorMessage = 'Ocorreu outro tipo de erro.';
+            // }
+
+            // Se houver uma mensagem de erro, exibe o pop-up de erro
+            if (errorMessage) {
+                showErrorPopup(errorMessage);
+            } else if (success === 'true') {
+                // Se houver o parâmetro sucesso=true, exibe a mensagem de sucesso e redireciona
+                showSuccessMessage();
+            }
+        };
+    </script>
 </body>
 </html>
