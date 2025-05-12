@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.unitins
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [app-name, data, data-jdbc, flyway, graalvm, http-client-test, jackson-databind, java, java-application, jdbc-hikari, junit, logback, maven, maven-enforcer-plugin, micronaut-aot, micronaut-http-validation, mysql, netty-server, openapi, properties, readme, security-annotations, security-session, serialization-jackson, shade, static-resources, swagger-ui, test-resources, validation, views-fieldset, views-thymeleaf]

@@ -1,0 +1,43 @@
+#Mon May 12 11:36:54 UTC 2025
+flyway:
+  datasources:
+    default:
+      enabled: true
+      url: jdbc:mysql://localhost:3306/lista
+      user: root
+      password: root
+      locations: classpath:db/migration
+
+micronaut:
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+      swagger-ui:
+        mapping: /swagger-ui/**
+        paths: classpath:META-INF/swagger/views/swagger-ui
+      swagger:
+        mapping: /swagger/**
+
+  application:
+    name: lista
+
+  security:
+    authentication: session
+
+datasources:
+  default:
+    db-type: mysql
+    dialect: MYSQL
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/lista
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    schema-generate: NONE
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl.auto: none
