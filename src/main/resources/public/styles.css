@@ -1,0 +1,156 @@
+/* Estilo global */
+body {
+    font-family: 'Inter', sans-serif; /* Usa a fonte Inter */
+    background: linear-gradient(to bottom right, #4CAF50, #81C784); /* Fundo gradiente verde */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Garante que o corpo ocupa pelo menos a altura da viewport */
+    margin: 0;
+    padding: 20px; /* Adiciona padding para telas menores */
+    box-sizing: border-box; /* Inclui padding na largura total */
+    overflow: hidden; /* Evita scrollbar se o conteúdo for exatamente 100vh */
+}
+
+/* Estilos para os containers principais (usado tanto para login quanto cadastro) */
+/* Aplicamos os mesmos estilos para .login-container e .signup-container */
+.login-container, .signup-container {
+    background-color: #ffffff; /* Fundo branco */
+    padding: 32px; /* Mais padding interno */
+    border-radius: 20px; /* Cantos mais arredondados */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Sombra mais proeminente */
+    width: 100%; /* Ocupa a largura total disponível */
+    max-width: 400px; /* Largura máxima para desktops */
+    text-align: center; /* Centraliza o conteúdo */
+}
+
+/* Estilos para os títulos (h2) dentro dos containers */
+.login-container h2, .signup-container h2 {
+    font-size: 28px; /* Tamanho maior */
+    font-weight: 700; /* Bold */
+    color: #333; /* Cor do texto */
+    margin-bottom: 24px; /* Espaço abaixo do título */
+    position: relative; /* Necessário para o pseudo-elemento ::after */
+    padding-bottom: 10px; /* Espaço para a linha abaixo do título */
+}
+
+/* Linha decorativa abaixo do título */
+.login-container h2::after, .signup-container h2::after {
+    content: ''; /* Conteúdo vazio para o pseudo-elemento */
+    position: absolute; /* Posicionamento absoluto em relação ao h2 */
+    left: 50%; /* Começa no centro horizontal */
+    bottom: 0; /* Alinha na parte inferior do h2 */
+    transform: translateX(-50%); /* Corrige a posição para centralizar */
+    width: 60px; /* Largura da linha */
+    height: 3px; /* Espessura da linha */
+    background-color: #4CAF50; /* Cor verde */
+    border-radius: 2px; /* Cantos arredondados para a linha */
+}
+
+/* Estilos para os grupos de input (label + input) */
+.input-group {
+    margin-bottom: 20px; /* Espaço entre os grupos */
+    text-align: left; /* Alinha labels à esquerda */
+}
+
+.input-group label {
+    display: block; /* Label em sua própria linha */
+    font-size: 14px;
+    color: #555; /* Cor do texto */
+    margin-bottom: 8px; /* Espaço abaixo do label */
+    font-weight: 600; /* Semi-bold */
+}
+
+.input-group input {
+    width: 100%; /* Ocupa a largura total do container pai */
+    padding: 12px 16px; /* Padding interno */
+    font-size: 16px;
+    border: 1px solid #ddd; /* Borda cinza clara */
+    border-radius: 10px; /* Cantos arredondados para inputs */
+    outline: none; /* Remove o contorno padrão no foco */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transição suave para foco */
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+}
+
+/* Estilos para o input quando está em foco */
+.input-group input:focus {
+    border-color: #4CAF50; /* Borda verde no foco */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.2); /* Sombra suave no foco */
+}
+
+/* Estilos para o botão de submit */
+button {
+    width: 100%; /* Ocupa a largura total do container pai */
+    padding: 14px; /* Mais padding */
+    font-size: 18px; /* Tamanho maior */
+    background-color: #4CAF50; /* Verde primário */
+    color: white; /* Texto branco */
+    border: none; /* Remove a borda padrão */
+    border-radius: 10px; /* Cantos arredondados */
+    cursor: pointer; /* Muda o cursor para indicar clicável */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transição suave para hover/active */
+    font-weight: 600; /* Semi-bold */
+    margin-top: 10px; /* Espaço acima do botão */
+    letter-spacing: 0.5px; /* Espaçamento entre letras */
+}
+
+/* Estilos para o botão quando o mouse passa por cima */
+button:hover {
+    background-color: #45a049; /* Verde mais escuro no hover */
+    transform: translateY(-2px); /* Efeito de levantar */
+}
+
+/* Estilos para o botão quando é clicado */
+button:active {
+    transform: translateY(0); /* Efeito de pressionar */
+}
+
+/* Estilos para os links abaixo do formulário (login ou cadastro) */
+/* Aplicamos os mesmos estilos para .register-link e .login-link */
+.register-link, .login-link {
+    display: block; /* Link em sua própria linha */
+    margin-top: 24px; /* Espaço acima do link */
+    font-size: 15px;
+    color: #555; /* Cor do texto */
+    text-align: center; /* Centraliza o texto */
+}
+
+.register-link a, .login-link a {
+    color: #4CAF50; /* Cor do link */
+    text-decoration: none; /* Remove o sublinhado padrão */
+    font-weight: 600; /* Semi-bold */
+    transition: color 0.3s ease; /* Transição suave para hover */
+}
+
+/* Estilos para os links quando o mouse passa por cima */
+.register-link a:hover, .login-link a:hover {
+    color: #388E3C; /* Verde mais escuro no hover */
+    text-decoration: underline; /* Adiciona sublinhado no hover */
+}
+
+/* Estilos para placeholders nos inputs */
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #aaa; /* Cor cinza clara */
+    opacity: 1; /* Garante opacidade total no Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #aaa;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #aaa;
+}
+
+/* Responsividade básica para telas menores */
+@media (max-width: 480px) {
+    .login-container, .signup-container {
+        padding: 24px; /* Reduz padding em telas muito pequenas */
+    }
+    .login-container h2, .signup-container h2 {
+        font-size: 24px; /* Reduz tamanho do título */
+    }
+    .input-group input, button {
+        font-size: 15px; /* Reduz tamanho da fonte */
+    }
+}

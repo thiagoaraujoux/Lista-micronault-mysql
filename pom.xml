@@ -39,7 +39,12 @@
       <scope>compile</scope>
     </dependency>
     <!-- Removed the dependency as it is missing -->
-
+    
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
+    </dependency>
     <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-http-server-netty</artifactId>
