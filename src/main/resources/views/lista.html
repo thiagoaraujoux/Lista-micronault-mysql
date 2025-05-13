@@ -1,134 +1,251 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Minhas Listas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f9f9f9;
+        }
+
+        .content-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .add-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+            background: #fff;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .fa-edit {
+            cursor: pointer;
+            color: #2196F3;
+            margin-right: 10px;
+        }
+
+        .fa-trash {
+            cursor: pointer;
+            color: #E53935;
+        }
+
+        a {
+            text-decoration: none;
+            color: #E53935;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .modal-box h3 {
+            margin-top: 0;
+        }
+
+        .modal-box label {
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .modal-box button {
+            margin-top: 15px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .modal-box button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .modal-box button[type="button"] {
+            background-color: #ccc;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                width: 95%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <section>
-        <div class="content-container" style="text-align: center; padding: 20px;">
-            <h2>Minhas Listas de Tarefas</h2>
-            <p>Gerencie suas listas de tarefas aqui.</p>
+<section>
+    <div class="content-container">
+        <h2>Minhas Listas de Tarefas</h2>
+        <p>Gerencie suas listas de tarefas aqui.</p>
 
-            <!-- Ícone para adicionar lista -->
-            <div style="margin-top: 20px; margin-bottom: 20px;">
-                <i id="openModal" class="fa-solid fa-plus" style="font-size: 24px; cursor: pointer; color: #4CAF50;"></i>
-            </div>
+        <i id="openModal" class="fa-solid fa-plus add-icon" title="Nova Lista"></i>
 
-            <!-- Modal para Cadastro/Editar Lista -->
-            <div id="listaModal" style="display:none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -20%);
-                                         background: white; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border-radius: 8px;">
+        <!-- Modal -->
+        <div class="modal-overlay" id="listaModal">
+            <div class="modal-box">
                 <h3 id="modalTitle">Nova Lista</h3>
                 <form id="listaForm">
                     <input type="hidden" id="listaId">
-                    <label>Título:</label>
-                    <input type="text" id="titulo" required><br>
-                    <label>Descrição:</label>
-                    <input type="text" id="descricao" required><br>
-                    <label>Categoria:</label>
-                    <input type="text" id="categoriaId"><br>
+
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" name="titulo" required>
+
+                    <label for="descricao">Descrição:</label>
+                    <input type="text" id="descricao" name="descricao" required>
+
+                    <label for="categoriaId">Categoria:</label>
+                    <input type="text" id="categoriaId" name="categoriaId">
+
                     <button type="submit">Salvar</button>
                     <button type="button" id="closeModal">Fechar</button>
                 </form>
             </div>
-
-            <!-- Tabela de Listas -->
-            <div id="listasContainer">
-                <table border="1" style="width: 80%; margin: 0 auto; border-collapse: collapse; border-color: #ddd;">
-                    <thead>
-                        <tr style="background-color: #f2f2f2;">
-                            <th>Título</th>
-                            <th>Descrição</th>
-                            <th>Categoria</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="lista : ${listas}">
-                            <td th:text="${lista.titulo}"></td>
-                            <td th:text="${lista.descricao}"></td>
-                            <td th:text="${lista.categoriaId != null ? lista.categoriaId : 'Sem Categoria'}"></td>
-                            <td>
-                                <i class="fa-solid fa-edit editBtn" th:data-id="${lista.id}"
-                                   th:data-titulo="${lista.titulo}" th:data-descricao="${lista.descricao}" 
-                                   th:data-categoria="${lista.categoriaId}" style="cursor: pointer; color: #2196F3;"></i>
-                                <i class="fa-solid fa-trash deleteBtn" th:data-id="${lista.id}" style="cursor: pointer; color: #E53935;"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Link para sair -->
-            <div style="margin-top: 30px;">
-                <a th:href="@{/logout}" style="color: #E53935;">Sair</a>
-            </div>
         </div>
-    </section>
 
-    <script>
-        $(document).ready(function() {
-            // Abrir Modal
-            $("#openModal").click(function() {
-                $("#modalTitle").text("Nova Lista");
-                $("#listaId").val("");
-                $("#titulo").val("");
-                $("#descricao").val("");
-                $("#categoriaId").val("");
-                $("#listaModal").show();
-            });
+        <!-- Listas -->
+        <div id="listasContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="lista : ${listas}">
+                        <td th:text="${lista.titulo}"></td>
+                        <td th:text="${lista.descricao}"></td>
+                        <td th:text="${lista.categoriaId != null ? lista.categoriaId : 'Sem Categoria'}"></td>
+                        <td>
+                            <i class="fa-solid fa-edit editBtn"
+                               th:data-id="${lista.id}"
+                               th:data-titulo="${lista.titulo}"
+                               th:data-descricao="${lista.descricao}"
+                               th:data-categoria="${lista.categoriaId}"></i>
+                            <i class="fa-solid fa-trash deleteBtn" th:data-id="${lista.id}"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-            // Fechar Modal
-            $("#closeModal").click(function() {
-                $("#listaModal").hide();
-            });
+        <!-- Logout -->
+        <div style="margin-top: 30px;">
+            <a th:href="@{/logout}">Sair</a>
+        </div>
+    </div>
+</section>
 
-            // Editar Lista
-            $(".editBtn").click(function() {
-                $("#modalTitle").text("Editar Lista");
-                $("#listaId").val($(this).attr("data-id"));
-                $("#titulo").val($(this).attr("data-titulo"));
-                $("#descricao").val($(this).attr("data-descricao"));
-                $("#categoriaId").val($(this).attr("data-categoria"));
-                $("#listaModal").show();
-                
-            });
+<script>
+    $(document).ready(function () {
+        // Abrir Modal
+        $("#openModal").click(function () {
+            $("#modalTitle").text("Nova Lista");
+            $("#listaId").val("");
+            $("#titulo").val("");
+            $("#descricao").val("");
+            $("#categoriaId").val("");
+            $("#listaModal").css("display", "flex");
+        });
 
-            // Excluir Lista
-            $(".deleteBtn").click(function() {
-                let id = $(this).attr("data-id");
-                if(confirm("Tem certeza que deseja excluir esta lista?")) {
-                    $.ajax({
-                        url: "/lista/excluir/" + id,
-                        type: "POST",
-                        success: function() {
-                            location.reload(); // Atualiza a página
-                        }
-                    });
-                }
-            });
+        // Fechar Modal
+        $("#closeModal").click(function () {
+            $("#listaModal").hide();
+        });
 
-            // Salvar Lista (Cadastro ou Edição)
-            $("#listaForm").submit(function(event) {
-                event.preventDefault();
-                let id = $("#listaId").val();
-                let titulo = $("#titulo").val();
-                let descricao = $("#descricao").val();
-                let categoriaId = $("#categoriaId").val();
-                let url = id ? "/lista/editar/" + id : "/lista/cadastro";
+        // Editar Lista
+        $(".editBtn").click(function () {
+            $("#modalTitle").text("Editar Lista");
+            $("#listaId").val($(this).attr("data-id"));
+            $("#titulo").val($(this).attr("data-titulo"));
+            $("#descricao").val($(this).attr("data-descricao"));
+            $("#categoriaId").val($(this).attr("data-categoria"));
+            $("#listaModal").css("display", "flex");
+        });
 
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: { titulo, descricao, categoriaId },
-                    success: function() {
-                        $("#listaModal").hide();
-                        location.reload(); // Atualiza a página
-                    }
+        // Excluir Lista
+        $(".deleteBtn").click(function () {
+            let id = $(this).data("id");
+            if (confirm("Tem certeza que deseja excluir esta lista?")) {
+                $.post("/lista/excluir/" + id, function () {
+                    location.reload();
                 });
+            }
+        });
+
+        // Salvar Lista (Cadastrar ou Editar)
+        $("#listaForm").submit(function (event) {
+            event.preventDefault();
+            const id = $("#listaId").val();
+            const titulo = $("#titulo").val();
+            const descricao = $("#descricao").val();
+            const categoriaId = $("#categoriaId").val();
+
+            const url = id ? "/lista/editar/" + id : "/lista/cadastro";
+
+            $.post(url, { titulo, descricao, categoriaId }, function () {
+                $("#listaModal").hide();
+                location.reload();
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
