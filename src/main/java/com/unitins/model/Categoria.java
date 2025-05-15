@@ -1,9 +1,9 @@
 package com.unitins.model;
 
-// Importa a anotação Introspected para que o Micronaut possa gerar metadados para este bean
 import io.micronaut.core.annotation.Introspected;
+import java.util.Objects;
 
-// Anotação Introspected é necessária para que o Micronaut possa trabalhar com este bean
+// Anotação Introspected para que o Micronaut possa trabalhar com este bean
 @Introspected
 public class Categoria {
     private Long id;
@@ -14,7 +14,8 @@ public class Categoria {
     }
 
     // Construtor com campos
-    public Categoria(String nome) {
+    public Categoria(Long id, String nome) {
+        this.id = id;
         this.nome = nome;
     }
 
@@ -41,5 +42,19 @@ public class Categoria {
                "id=" + id +
                ", nome='" + nome + '\'' +
                '}';
+    }
+
+    // equals e hashCode baseados no ID
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Categoria categoria = (Categoria) o;
+        return Objects.equals(id, categoria.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

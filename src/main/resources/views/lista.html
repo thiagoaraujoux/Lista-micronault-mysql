@@ -2,129 +2,351 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minhas Listas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif; /* Usa a fonte Inter */
+            background: linear-gradient(to bottom right, #4CAF50, #81C784); /* Fundo gradiente verde */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha ao topo para permitir conteúdo mais longo */
+            min-height: 100vh; /* Garante que o corpo ocupa pelo menos a altura da viewport */
             margin: 0;
-            background: #f9f9f9;
+            padding: 40px 20px; /* Adiciona padding para telas menores e do topo */
+            box-sizing: border-box; /* Inclui padding na largura total */
+            position: relative; /* Necessário para posicionar os pop-ups */
         }
 
+        /* Estilos para o container principal de conteúdo */
         .content-container {
-            text-align: center;
-            padding: 40px 20px;
+            background-color: #ffffff; /* Fundo branco */
+            padding: 32px; /* Mais padding interno */
+            border-radius: 20px; /* Cantos mais arredondados */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Sombra mais proeminente */
+            width: 100%; /* Ocupa a largura total disponível */
+            max-width: 800px; /* Largura máxima */
+            text-align: center; /* Centraliza o conteúdo */
+            z-index: 1; /* Garante que o container fique acima do overlay dos pop-ups */
+            position: relative; /* Necessário para z-index */
         }
 
-        h2 {
-            margin-bottom: 10px;
+        /* Estilos para o título */
+        .content-container h2 {
+            font-size: 28px; /* Tamanho maior */
+            font-weight: 700; /* Bold */
+            color: #333; /* Cor do texto */
+            margin-top: 0; /* Remove margin-top padrão */
+            margin-bottom: 24px; /* Espaço abaixo do título */
+            position: relative; /* Necessário para o pseudo-elemento ::after */
+            padding-bottom: 10px; /* Espaço para a linha abaixo do título */
         }
 
+        /* Linha decorativa abaixo do título */
+        .content-container h2::after {
+            content: ''; /* Conteúdo vazio para o pseudo-elemento */
+            position: absolute; /* Posicionamento absoluto em relação ao h2 */
+            left: 50%; /* Começa no centro horizontal */
+            bottom: 0; /* Alinha na parte inferior do h2 */
+            transform: translateX(-50%); /* Corrige a posição para centralizar */
+            width: 60px; /* Largura da linha */
+            height: 3px; /* Espessura da linha */
+            background-color: #4CAF50; /* Cor verde */
+            border-radius: 2px; /* Cantos arredondados para a linha */
+        }
+
+        /* Estilos para a descrição */
+        .content-container p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px; /* Espaço abaixo da descrição */
+        }
+
+
+        /* Estilos para o ícone de adicionar lista */
         .add-icon {
-            font-size: 24px;
+            font-size: 32px; /* Ícone maior */
             cursor: pointer;
-            color: #4CAF50;
-            margin: 20px 0;
+            color: #4CAF50; /* Cor verde */
+            margin: 0 0 30px 0; /* Espaço acima e abaixo */
+            transition: color 0.3s ease, transform 0.2s ease; /* Transição suave */
         }
 
+        .add-icon:hover {
+            color: #388E3C; /* Verde mais escuro no hover */
+            transform: scale(1.1); /* Aumenta levemente no hover */
+        }
+
+        /* Estilos para a tabela */
         table {
-            width: 80%;
+            width: 100%; /* Ocupa a largura total do container */
             margin: 0 auto;
-            border-collapse: collapse;
-            border: 1px solid #ddd;
+            border-collapse: separate; /* Permite border-radius nas células */
+            border-spacing: 0; /* Remove espaço entre células */
+            border: 1px solid #e0e0e0; /* Borda mais clara */
             background: #fff;
+            border-radius: 10px; /* Cantos arredondados para a tabela */
+            overflow: hidden; /* Garante que os cantos arredondados funcionem */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
         }
 
         th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
+            padding: 15px 12px; /* Mais padding interno */
+            border-bottom: 1px solid #eee; /* Borda inferior clara */
+            text-align: left; /* Alinha texto à esquerda */
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #f5f5f5; /* Fundo mais claro para o cabeçalho */
+            font-weight: 600; /* Semi-bold */
+            color: #333;
+            text-transform: uppercase; /* Texto em maiúsculas */
+            font-size: 14px;
         }
 
+        /* Estilo para a última borda da tabela */
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+         /* Estilo para a célula de categoria - centraliza o texto */
+        td:nth-child(3) {
+             text-align: center;
+         }
+
+        /* Estilos para as células de ação */
+        td:last-child {
+            text-align: center; /* Centraliza ícones */
+            white-space: nowrap; /* Evita quebra de linha */
+        }
+
+        /* Estilos para os ícones de ação */
         .fa-edit {
             cursor: pointer;
-            color: #2196F3;
-            margin-right: 10px;
+            color: #2196F3; /* Azul */
+            margin-right: 15px; /* Espaço entre ícones */
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .fa-edit:hover {
+            color: #1976D2; /* Azul mais escuro */
+            transform: scale(1.1);
         }
 
         .fa-trash {
             cursor: pointer;
-            color: #E53935;
+            color: #E53935; /* Vermelho */
+            transition: color 0.3s ease, transform 0.2s ease;
         }
 
-        a {
-            text-decoration: none;
-            color: #E53935;
+        .fa-trash:hover {
+            color: #C62828; /* Vermelho mais escuro */
+            transform: scale(1.1);
         }
 
-        /* Modal */
+        /* Estilos para o link de logout */
+        .logout-link {
+            display: inline-block; /* Permite margem */
+            margin-top: 30px; /* Espaço acima */
+            font-size: 16px;
+            color: #E53935; /* Cor vermelha */
+            text-decoration: none; /* Remove sublinhado */
+            font-weight: 600; /* Semi-bold */
+            transition: color 0.3s ease;
+        }
+
+        .logout-link:hover {
+            color: #C62828; /* Vermelho mais escuro */
+            text-decoration: underline; /* Adiciona sublinhado no hover */
+        }
+
+
+        /* Modal Overlay */
         .modal-overlay {
-            display: none;
+            display: none; /* Controlado por JS */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
+            background: rgba(0, 0, 0, 0.6); /* Fundo semi-transparente escuro */
+            z-index: 1000; /* Acima de outros elementos */
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px); /* Efeito de desfoque */
         }
 
+        /* Modal Box */
         .modal-box {
             background: white;
-            padding: 25px;
-            border-radius: 8px;
+            padding: 30px; /* Mais padding */
+            border-radius: 15px; /* Cantos mais arredondados */
             width: 90%;
-            max-width: 400px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            max-width: 450px; /* Largura máxima um pouco maior */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Sombra mais proeminente */
+            text-align: left; /* Alinha conteúdo do modal à esquerda */
+            position: relative; /* Para posicionar botões ou fechar */
         }
 
         .modal-box h3 {
             margin-top: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center; /* Centraliza o título do modal */
         }
 
-        .modal-box label {
-            display: block;
-            margin-top: 10px;
-            text-align: left;
+        /* Estilos para os grupos de input/select dentro do modal */
+        .modal-box .input-group {
+            margin-bottom: 20px; /* Espaço entre os grupos */
+            text-align: left; /* Alinha labels à esquerda */
         }
 
-        .modal-box input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        .modal-box .input-group label {
+            display: block; /* Label em sua própria linha */
+            font-size: 14px;
+            color: #555; /* Cor do texto */
+            margin-bottom: 8px; /* Espaço abaixo do label */
+            font-weight: 600; /* Semi-bold */
         }
 
+        .modal-box .input-group input,
+        .modal-box .input-group select { /* Aplica estilos a input e select */
+            width: 100%; /* Ocupa a largura total do container pai */
+            padding: 12px 16px; /* Padding interno */
+            font-size: 16px;
+            border: 1px solid #ddd; /* Borda cinza clara */
+            border-radius: 10px; /* Cantos arredondados para inputs/selects */
+            outline: none; /* Remove o contorno padrão no foco */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transição suave para foco */
+            box-sizing: border-box; /* Inclui padding e borda na largura total */
+            background-color: #fff; /* Fundo branco para select */
+            appearance: none; /* Remove a aparência padrão do select em alguns browsers */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            /* Adiciona um ícone de seta customizado se desejar, usando background-image */
+            /* background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2C114.7L159.3%2C242.4c-4.5%2C4.5-10.6%2C6.7-16.7%2C6.7c-6.1%2C0-12.2-2.2-16.7-6.7L5.4%2C114.7c-6-6-6-15.6%2C0-21.2 c6-6%2C15.6-6%2C21.2%2C0l130.6%2C130.6L266.8%2C93.5c6-6%2C15.6-6%2C21.2%2C0C293%2C99.1%2C293%2C108.7%2C287%2C114.7z%22%2F%3E%3C%2Fsvg%3E'); */
+            /* background-repeat: no-repeat; */
+            /* background-position: right 10px top 50%; */
+            /* background-size: 12px auto; */
+        }
+
+        /* Estilos para input/select do modal quando está em foco */
+        .modal-box .input-group input:focus,
+        .modal-box .input-group select:focus {
+            border-color: #4CAF50; /* Borda verde no foco */
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.2); /* Sombra suave no foco */
+        }
+
+
+        /* Estilos para botões dentro do modal */
         .modal-box button {
-            margin-top: 15px;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            padding: 10px 20px; /* Padding */
+            font-size: 16px; /* Tamanho maior */
+            border: none; /* Remove a borda padrão */
+            border-radius: 10px; /* Cantos arredondados */
+            cursor: pointer; /* Muda o cursor para indicar clicável */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Transição suave */
+            font-weight: 600; /* Semi-bold */
+            margin-top: 15px; /* Espaço acima dos botões */
         }
 
         .modal-box button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #4CAF50; /* Verde primário */
+            color: white; /* Texto branco */
+            margin-right: 10px; /* Espaço entre botões */
         }
 
-        .modal-box button[type="button"] {
-            background-color: #ccc;
-            margin-left: 10px;
+        .modal-box button[type="submit"]:hover {
+            background-color: #45a049; /* Verde mais escuro no hover */
+            transform: translateY(-2px); /* Efeito de levantar */
         }
 
+         .modal-box button[type="submit"]:active {
+             transform: translateY(0); /* Efeito de pressionar */
+         }
+
+        .modal-box button[type="button"] { /* Fechar */
+            background-color: #e0e0e0; /* Cinza claro */
+            color: #333; /* Cor do texto */
+        }
+
+        .modal-box button[type="button"]:hover {
+             background-color: #ccc; /* Cinza mais escuro no hover */
+             transform: translateY(-2px); /* Efeito de levantar */
+        }
+
+        .modal-box button[type="button"]:active {
+            transform: translateY(0); /* Efeito de pressionar */
+        }
+
+
+        /* Responsividade básica */
         @media (max-width: 768px) {
-            table {
-                width: 95%;
-            }
+             .content-container {
+                 padding: 24px; /* Reduz padding */
+             }
+             .content-container h2 {
+                 font-size: 24px; /* Reduz tamanho do título */
+             }
+             th, td {
+                 padding: 10px 8px; /* Reduz padding da tabela */
+                 font-size: 14px;
+             }
+              .modal-box {
+                  padding: 20px;
+              }
+              .modal-box h3 {
+                  font-size: 20px;
+              }
+             .modal-box input, .modal-box select, .modal-box button { /* Inclui select aqui */
+                 font-size: 14px; /* Reduz tamanho da fonte no modal */
+             }
+             .add-icon {
+                 font-size: 28px;
+             }
         }
+
+         @media (max-width: 480px) {
+            .content-container {
+                 padding: 15px; /* Reduz ainda mais o padding */
+            }
+             .content-container h2 {
+                 font-size: 20px; /* Reduz ainda mais o título */
+             }
+             .content-container p {
+                 font-size: 14px;
+             }
+             th, td {
+                 padding: 8px 5px; /* Reduz padding da tabela */
+                 font-size: 12px;
+             }
+             .add-icon {
+                 font-size: 24px;
+             }
+             .fa-edit, .fa-trash {
+                 font-size: 14px;
+                 margin-right: 10px;
+             }
+             .modal-box {
+                 padding: 15px;
+             }
+             .modal-box h3 {
+                 font-size: 18px;
+             }
+             .modal-box .input-group label {
+                 font-size: 12px;
+             }
+             .modal-box input, .modal-box select, .modal-box button { /* Inclui select aqui */
+                 font-size: 12px;
+                 padding: 10px;
+             }
+         }
+
     </style>
 </head>
 <body>
@@ -135,21 +357,35 @@
 
         <i id="openModal" class="fa-solid fa-plus add-icon" title="Nova Lista"></i>
 
-        <!-- Modal -->
         <div class="modal-overlay" id="listaModal">
             <div class="modal-box">
                 <h3 id="modalTitle">Nova Lista</h3>
                 <form id="listaForm">
                     <input type="hidden" id="listaId">
 
-                    <label for="titulo">Título:</label>
-                    <input type="text" id="titulo" name="titulo" required>
+                    <div class="input-group">
+                         <label for="titulo">Título:</label>
+                         <input type="text" id="titulo" name="titulo" placeholder="Digite o título da lista" required>
+                    </div>
 
-                    <label for="descricao">Descrição:</label>
-                    <input type="text" id="descricao" name="descricao" required>
+                    <div class="input-group">
+                         <label for="descricao">Descrição:</label>
+                         <input type="text" id="descricao" name="descricao" placeholder="Digite a descrição da lista" required>
+                    </div>
 
-                    <label for="categoriaId">Categoria:</label>
-                    <input type="text" id="categoriaId" name="categoriaId">
+                     <div class="input-group">
+                         <label for="categoriaId">Categoria:</label>
+                         <input type="text" id="categoriaId" name="categoriaId" placeholder="ID da Categoria (opcional)">
+                     </div>
+
+                    <div class="input-group">
+                         <label for="status">Status:</label>
+                         <select id="status" name="status" required>
+                             <option value="ATIVA">Ativa</option>
+                             <option value="CONCLUIDA">Concluída</option>
+                             <option value="ARQUIVADA">Arquivada</option>
+                         </select>
+                     </div>
 
                     <button type="submit">Salvar</button>
                     <button type="button" id="closeModal">Fechar</button>
@@ -157,7 +393,6 @@
             </div>
         </div>
 
-        <!-- Listas -->
         <div id="listasContainer">
             <table>
                 <thead>
@@ -165,7 +400,7 @@
                         <th>Título</th>
                         <th>Descrição</th>
                         <th>Categoria</th>
-                        <th>Ações</th>
+                         <th>Status</th> <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -173,35 +408,36 @@
                         <td th:text="${lista.titulo}"></td>
                         <td th:text="${lista.descricao}"></td>
                         <td th:text="${lista.categoriaId != null ? lista.categoriaId : 'Sem Categoria'}"></td>
-                        <td>
+                        <td th:text="${lista.status != null ? lista.status.descricao : 'Desconhecido'}"></td> <td>
                             <i class="fa-solid fa-edit editBtn"
                                th:data-id="${lista.id}"
                                th:data-titulo="${lista.titulo}"
                                th:data-descricao="${lista.descricao}"
-                               th:data-categoria="${lista.categoriaId}"></i>
-                            <i class="fa-solid fa-trash deleteBtn" th:data-id="${lista.id}"></i>
+                               th:data-categoria="${lista.categoriaId}"
+                               th:data-status="${lista.status}"></i> <i class="fa-solid fa-trash deleteBtn" th:data-id="${lista.id}"></i>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Logout -->
         <div style="margin-top: 30px;">
-            <a th:href="@{/logout}">Sair</a>
+            <a class="logout-link" th:href="@{/logout}">Sair</a>
         </div>
     </div>
 </section>
 
 <script>
     $(document).ready(function () {
-        // Abrir Modal
+        // Abrir Modal para Nova Lista
         $("#openModal").click(function () {
             $("#modalTitle").text("Nova Lista");
             $("#listaId").val("");
             $("#titulo").val("");
             $("#descricao").val("");
             $("#categoriaId").val("");
+            $("#status").val("ATIVA"); // Define o status padrão para nova lista
+            $("#listaForm").attr('action', '/lista/cadastro');
             $("#listaModal").css("display", "flex");
         });
 
@@ -210,40 +446,49 @@
             $("#listaModal").hide();
         });
 
-        // Editar Lista
-        $(".editBtn").click(function () {
+        // Editar Lista - Usando delegação de eventos pois os botões são renderizados via Thymeleaf
+        $("#listasContainer").on("click", ".editBtn", function () {
             $("#modalTitle").text("Editar Lista");
-            $("#listaId").val($(this).attr("data-id"));
-            $("#titulo").val($(this).attr("data-titulo"));
-            $("#descricao").val($(this).attr("data-descricao"));
-            $("#categoriaId").val($(this).attr("data-categoria"));
+            $("#listaId").val($(this).data("id"));
+            $("#titulo").val($(this).data("titulo"));
+            $("#descricao").val($(this).data("descricao"));
+            $("#categoriaId").val($(this).data("categoria"));
+            // Preenche o campo de status com o valor do atributo data-status
+            $("#status").val($(this).data("status"));
+            $("#listaForm").attr('action', '/lista/editar/' + $(this).data("id"));
             $("#listaModal").css("display", "flex");
         });
 
-        // Excluir Lista
-        $(".deleteBtn").click(function () {
+        // Excluir Lista - Usando delegação de eventos
+        $("#listasContainer").on("click", ".deleteBtn", function () {
             let id = $(this).data("id");
             if (confirm("Tem certeza que deseja excluir esta lista?")) {
-                $.post("/lista/excluir/" + id, function () {
-                    location.reload();
-                });
+                // Usando um formulário POST para exclusão
+                $('<form action="/lista/excluir/' + id + '" method="post"></form>').appendTo('body').submit();
             }
         });
 
         // Salvar Lista (Cadastrar ou Editar)
         $("#listaForm").submit(function (event) {
-            event.preventDefault();
-            const id = $("#listaId").val();
-            const titulo = $("#titulo").val();
-            const descricao = $("#descricao").val();
-            const categoriaId = $("#categoriaId").val();
+            event.preventDefault(); // Impede o envio padrão do formulário
 
-            const url = id ? "/lista/editar/" + id : "/lista/cadastro";
+            const form = $(this);
+            const url = form.attr('action');
+            const formData = form.serialize(); // Serializa os dados do formulário (inclui o status)
 
-            $.post(url, { titulo, descricao, categoriaId }, function () {
+            $.post(url, formData, function () {
                 $("#listaModal").hide();
-                location.reload();
+                location.reload(); // Recarrega a página após sucesso
+            }).fail(function(xhr, status, error) {
+                alert("Erro ao salvar a lista: " + xhr.responseText); // Exibe erro
             });
+        });
+
+        // Fechar modal clicando fora
+        $(window).click(function(event) {
+            if ($(event.target).is("#listaModal")) {
+                $("#listaModal").hide();
+            }
         });
     });
 </script>

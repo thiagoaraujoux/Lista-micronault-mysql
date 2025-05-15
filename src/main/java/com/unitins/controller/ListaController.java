@@ -16,6 +16,7 @@ import java.util.*;
 public class ListaController {
 
     private final ListaRepository listaRepository;
+    
 
     public ListaController(ListaRepository listaRepository) {
         this.listaRepository = listaRepository;
@@ -50,7 +51,7 @@ public class ListaController {
 
     @Get("/cadastro")
     @Produces(MediaType.TEXT_HTML)
-    @View("lista_cadastro")
+    @View("lista")
     public Map<String, Object> showListaCadastroForm(Session session) {
         Map<String, Object> model = new HashMap<>();
         Optional<Object> usuarioIdOptional = session.get("usuarioId");
@@ -172,4 +173,5 @@ public class ListaController {
             return HttpResponse.serverError("Erro ao excluir a lista: " + e.getMessage());
         }
     }
+    
 }
